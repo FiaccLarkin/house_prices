@@ -38,7 +38,6 @@ else:
 
 fig, ax = plt.subplots()
 change_mean = subset.groupby('date')['change'].mean()
-print(change_mean)
 change_mean.plot(kind='bar', title='mean percentage change', color='b')
 plt.tight_layout()
 st.pyplot(fig)
