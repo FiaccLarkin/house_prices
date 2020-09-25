@@ -16,11 +16,13 @@ data.loc[data['location'] == 'Whole Country', 'order'] = -2
 data.loc[data['location'] == 'Limerick City', 'order'] = -1
 
 data['wide area'] = ''
-data.loc[data['location']]
+data['wide area'] = data['wide area'].where(data['location'].apply(lambda x: 'imerick' not in x), 'Limerick')
+data['wide area'] = data['wide area'].where(data['location'].apply(lambda x: 'ublin' not in x), 'Dublin')
+data['wide area'] = data['wide area'].where(data['location'].apply(lambda x: 'ork' not in x), 'Cork')
 
 data.sort_values('order', ascending=True, inplace=True)
 
-locations = data['location'].unique().tolist()
+locations = data['wide area'].unique().tolist()
 locations = locations + ['Whole Country']
 
 selected_location = st.sidebar.selectbox('location', locations)
@@ -31,7 +33,7 @@ st.title(f'Property Price Changes - {selected_location}')
 if selected_location == 'Whole Country':
     subset = data
 else:
-    subset = data[data['location'] == selected_location]
+    subset = data[data['wide area'] == selected_location]
 
 
 change_mean = subset.groupby('date')['change'].mean()
