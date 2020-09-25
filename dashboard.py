@@ -36,20 +36,23 @@ else:
     subset = data[data['wide area'] == selected_location]
 
 
+fig, ax = plt.subplots()
 change_mean = subset.groupby('date')['change'].mean()
 print(change_mean)
 change_mean.plot(kind='bar', title='mean percentage change', color='b')
 plt.tight_layout()
-st.pyplot()
+st.pyplot(fig)
 
+fig, ax = plt.subplots()
 change_mean.cumsum().plot(title='cummulative sum', color='r')
 plt.tight_layout()
-st.pyplot()
+st.pyplot(fig)
 
+fig, ax = plt.subplots()
 pos_sum = subset.groupby('date')['pos'].sum()
 pos_sum.plot(kind='bar', title='up/down sum', color='y')
 plt.tight_layout()
-st.pyplot()
+st.pyplot(fig)
 
 
 
