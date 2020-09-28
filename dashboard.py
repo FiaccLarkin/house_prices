@@ -20,21 +20,25 @@ data['wide area'] = data['wide area'].where(data['location'].apply(lambda x: 'im
 data['wide area'] = data['wide area'].where(data['location'].apply(lambda x: 'ublin' not in x), 'Dublin')
 data['wide area'] = data['wide area'].where(data['location'].apply(lambda x: 'ork' not in x), 'Cork')
 
+# Location selection
 data.sort_values('order', ascending=True, inplace=True)
-
 locations = data['wide area'].unique().tolist()
 locations = locations + ['Whole Country']
-
 selected_location = st.sidebar.selectbox('location', locations)
 
-st.title(f'Property Price Changes - {selected_location}')
+# Date range selection
+data.index = pd.to_datetime(data.index)
+data.sort_index(inplace=True)
+start_date = st.sidebar.date_input('start date', data.index[0])
+end_date = st.sidebar.date_input('end date', data.index[-1])
+data = data.loc[start_date:end_date]
 
+st.title(f'Property Price Changes - {selected_location}')
 
 if selected_location == 'Whole Country':
     subset = data
 else:
     subset = data[data['wide area'] == selected_location]
-
 
 fig, ax = plt.subplots()
 change_mean = subset.groupby('date')['change'].mean()
