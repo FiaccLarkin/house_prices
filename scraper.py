@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 from bs4 import BeautifulSoup
 import requests
@@ -25,7 +27,8 @@ def content_to_df(text):
         l.append({'date': date_, 'location': location, 'change': float(change_str)})
 
     df = pd.DataFrame(l)
-    df.set_index('date', inplace=True)
+    if not df.empty:
+        df.set_index('date', inplace=True)
     return df
 
 
@@ -36,5 +39,6 @@ for i in range(1, pages):
     response = requests.get(full_url)
     df = df.append(content_to_df(response.content))
 
-
-df.to_csv('data.csv')
+directory = dir_path = os.path.dirname(os.path.realpath(__file__))
+full_file = os.path.join(directory, 'data.csv')
+df.to_csv(full_file)
