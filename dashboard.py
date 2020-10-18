@@ -1,9 +1,10 @@
 import streamlit as st 
 import pandas as pd
 import matplotlib.pyplot as plt
+import os 
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
-
-data = pd.read_csv('data.csv', index_col='date')
+data = pd.read_csv(os.path.join(dir_path, 'data.csv'), index_col='date')
 data.index = pd.to_datetime(data.index)
 data.index = data.index.map(lambda x: x.date())
 
